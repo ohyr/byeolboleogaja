@@ -7,15 +7,18 @@ import World from '@/pages/World';
 import Museum from '@/pages/Museum';
 import Observatory from '@/pages/Observatory';
 import Horoscope from '@/pages/Horoscope';
-
+import SpaceTravelDialog from './components/SpaceTravelDialog';
+import ImageGallery from '@/pages/MuseumGallery';
 export default function Routes() {
   return (
     <ReactRouterRoutes>
       <Route path="/" element={<MainPage />} />
+      <Route path="/spaceship" element={<SpaceTravelDialog />} />
       <Route path="/vite" element={<Vite />} />
       <Route path="/worldmap" element={<WorldMap />} />
       <Route path="/world" element={<World />} />
       <Route path="/museum" element={<Museum />} />
+      <Route path="/museum/gallery" element={<ImageGallery />} />
       <Route path="/observatory" element={<Observatory />} />
       <Route path="/horoscope" element={<Horoscope />} />
       <Route path="/404" element={<NotFound />} />

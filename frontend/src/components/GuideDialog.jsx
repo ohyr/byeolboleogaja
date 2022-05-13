@@ -10,8 +10,8 @@ import {
   Typography,
 } from '@mui/material';
 
-const GuideDialog = ({ guideInfos }) => {
-  const [open, setOpen] = useState(true);
+const GuideDialog = ({ guideInfos, open, setOpen }) => {
+  // const [open, setOpen] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
   const maxSteps = guideInfos.length;
 
@@ -47,7 +47,9 @@ const GuideDialog = ({ guideInfos }) => {
       <Box
         component="img"
         src={guideInfos[activeStep].imgPath}
-        sx={{ m: 1 }}
+        sx={{
+          m: 1,
+        }}
       ></Box>
       <DialogContent>
         <Typography

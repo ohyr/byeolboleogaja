@@ -1,12 +1,32 @@
+import { useState, useEffect } from 'react';
+import WorldGuideDialog from '@/components/WorldGuideDialog';
+import Menu from '@/components/Menu';
 import WorldContainer from '@/components/WorldContainer';
-import citykey from '@/assets/audio/bgm-citykey.mp3';
+import { worldGuideInfos } from '@/constants';
 
 export default function World() {
+  const [guideOpen, setGuideOpen] = useState(false);
+
+  useEffect(() => {
+    setTimeout(function () {
+      setGuideOpen(true);
+    }, 3000);
+  }, []);
+
   return (
-    // <main style={{ padding: '1rem 0' }}>
     <main>
-      <audio src={citykey} autoPlay={true} loop={true}></audio>
       <WorldContainer />
+      <WorldGuideDialog
+        guideInfos={worldGuideInfos}
+        open={guideOpen}
+        setOpen={setGuideOpen}
+      />
+      <Menu
+        isGuideDialog={true}
+        setGuideOpen={setGuideOpen}
+        isWorld={false}
+        placeBGM={'world'}
+      />
     </main>
   );
 }

@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 
 const GuideDialog = ({ guideInfos, open, setOpen }) => {
-  // const [open, setOpen] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
   const maxSteps = guideInfos.length;
 
@@ -48,26 +47,28 @@ const GuideDialog = ({ guideInfos, open, setOpen }) => {
         component="img"
         src={guideInfos[activeStep].imgPath}
         sx={{
-          m: 1,
+          ml: 1,
+          mr: 1,
         }}
       ></Box>
-      <DialogContent>
-        <Typography
-          sx={{
-            fontSize: '1.2rem',
-            fontWeight: 'bold',
-            textTransform: 'none',
-          }}
-        >
-          {guideInfos[activeStep].description}
-        </Typography>
-      </DialogContent>
+      <Typography
+        sx={{
+          mt: 1,
+          ml: 1,
+          mr: 1,
+          fontSize: '1.2rem',
+          fontWeight: 'bold',
+          textTransform: 'none',
+        }}
+      >
+        {guideInfos[activeStep].description}
+      </Typography>
       <MobileStepper
         steps={maxSteps}
         position="static"
         activeStep={activeStep}
-        nextButton={<Button></Button>}
-        backButton={<Button></Button>}
+        nextButton={<Button disabled></Button>}
+        backButton={<Button disabled></Button>}
       />
       <DialogActions>
         <Button

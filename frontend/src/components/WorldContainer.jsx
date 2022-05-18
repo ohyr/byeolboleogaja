@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
+
 import 'aframe';
-import { Button } from '@mui/material';
 import sky from '@/assets/img/world/bg-world.jpg?url';
 import ground from '@/assets/model/world/mdl-ground.glb?url';
 import library from '@/assets/model/world/mdl-library.glb?url';
@@ -9,18 +9,17 @@ import spaceship from '@/assets/model/world/mdl-spaceship.glb?url';
 import museum from '@/assets/model/world/mdl-museum.glb?url';
 import satellite from '@/assets/model/world/mdl-satellite.glb?url';
 import witchHouse from '@/assets/model/world/mdl-witchhouse.glb?url';
-import amongus from '@/assets/model/common/mdl-amongus.glb?url';
 import observatoryNpc from '@/assets/model/world/mdl-npc-1.glb?url';
 import libraryNpc from '@/assets/model/world/mdl-npc-2.glb?url';
 import museumNpc from '@/assets/model/world/mdl-npc-3.glb?url';
 import spaceshipNpc from '@/assets/model/world/mdl-npc-4.glb?url';
 import horoscopeNpc from '@/assets/model/world/mdl-npc-5.glb?url';
-import questionmark from '@/assets/img/world/img-questionmark.png';
-import GuideDialog from '@/components/GuideDialog';
+import exclamationMark from '@/assets/model/world/mdl-exclamation-mark.glb?url';
+
 import LoadingScene from '@/components/LoadingScene';
 import BuildingDialog from '@/components/BuildingDialog';
+
 import {
-  worldGuideInfos,
   observatoryIntro,
   libraryIntro,
   museumIntro,
@@ -28,10 +27,13 @@ import {
   horoscopeIntro,
 } from '@/constants';
 
+import { useStore } from '@/store';
+
 const WorldContainer = () => {
-  const [guideOpen, setGuideOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+
+  const chracterColor = useStore((state) => state.chracterColor);
 
   useEffect(() => {
     const sceneEl = document.querySelector('a-scene');
@@ -47,44 +49,43 @@ const WorldContainer = () => {
     const horoscopeNpcEl = sceneEl.querySelector('#horoscopeNpc-model');
 
     libraryEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
     observatoryEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
     spaceshipEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
     satelliteEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
     witchHouseEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
     libraryNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
     observatoryNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
     museumNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
     spaceshipNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
     horoscopeNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress+1);
+      setProgress(progress + 1);
     });
-  })
+  });
 
   useEffect(() => {
     // model-loaded 이벤트 3개가 1개로 처리되는 문제로 progress 값 6 이상으로 임의 설정
     if (progress >= 6) {
       setIsLoading(false);
-      setGuideOpen(true);
     }
-  },[progress])
+  }, [progress]);
 
   const [open, setOpen] = useState(true);
   const [isopen, setOpened] = useState(false);
@@ -127,8 +128,12 @@ const WorldContainer = () => {
   });
   return (
     <>
-      {isLoading && <LoadingScene loadingTime={progress}/>}
-      <a-scene loading-screen="enabled: false" shadow="type: pcfsoft">
+      {isLoading && <LoadingScene loadingTime={progress} />}
+      <a-scene
+        vr-mode-ui="enabled: false"
+        loading-screen="enabled: false"
+        shadow="type: pcfsoft"
+      >
         <a-assets>
           <img id="sky" src={sky} />
           <a-asset-item id="ground" src={ground}></a-asset-item>
@@ -138,17 +143,27 @@ const WorldContainer = () => {
           <a-asset-item id="museum" src={museum}></a-asset-item>
           <a-asset-item id="satellite" src={satellite}></a-asset-item>
           <a-asset-item id="witch-house" src={witchHouse}></a-asset-item>
-          <a-asset-item id="amongus" src={amongus}></a-asset-item>
+          <a-asset-item id="amongus" src={chracterColor}></a-asset-item>
           <a-asset-item id="libraryNpc" src={libraryNpc}></a-asset-item>
           <a-asset-item id="observatoryNpc" src={observatoryNpc}></a-asset-item>
           <a-asset-item id="museumNpc" src={museumNpc}></a-asset-item>
           <a-asset-item id="spaceshipNpc" src={spaceshipNpc}></a-asset-item>
           <a-asset-item id="horoscopeNpc" src={horoscopeNpc}></a-asset-item>
+          <a-asset-item id="exclamationMark" src={exclamationMark}></a-asset-item>
         </a-assets>
         <a-sky src="#sky" />
         <a-entity
           position="0 400 25"
           light="type:point;
+          intensity: 1.5;
+          castShadow:true;
+          shadowCameraTop:    500;
+          shadowCameraRight:  500;
+          shadowCameraLeft:   -500"
+        ></a-entity>
+        <a-entity
+          position="0 400 25"
+          light="type:directional;
           intensity: 1.5;
           castShadow:true;
           shadowCameraTop:    500;
@@ -165,7 +180,7 @@ const WorldContainer = () => {
           id="library-model"
           src="#library"
           shadow="cast: true; receive: false"
-          position="82.276 14.178 -204.775"
+          position="82.276 14.178 -183"
           rotation="0 90 0"
         />
         <a-gltf-model
@@ -181,7 +196,8 @@ const WorldContainer = () => {
           src="#spaceship"
           shadow="cast: true; receive: false"
           scale="100 100 100"
-          position="-60.211 -1.030 -262.203"
+          position="-85 -2 -200"
+          rotation="0 140 0"
         />
         <a-gltf-model
           id="museum-model"
@@ -203,15 +219,9 @@ const WorldContainer = () => {
           src="#witch-house"
           shadow="cast: true; receive: false"
           scale="0.3 0.3 0.3"
-          position="-83.652 15.925 -359.571"
-          rotation="179.947 0 -179.957"
-        />
-        <a-gltf-model
-          id="libraryNpc-model"
-          src="#libraryNpc"
-          scale="12 12 12"
-          position="50 2 -200"
-          rotation="0 270 0"
+          position="-60 15.925 -140
+          "
+          rotation="180.947 90 -179.957"
         />
         <a-gltf-model
           id="observatoryNpc-model"
@@ -228,7 +238,7 @@ const WorldContainer = () => {
           src="#libraryNpc"
           shadow="cast: true; receive: false"
           scale="12 12 12"
-          position="50 2 -200"
+          position="49 1.8 -179"
           rotation="0 270 0"
         />
         <a-gltf-model
@@ -246,7 +256,7 @@ const WorldContainer = () => {
           src="#spaceshipNpc"
           shadow="cast: true; receive: false"
           scale="15 15 15"
-          position="-55 2.5 -200"
+          position="-45 2.5 -200"
           rotation="0 60 0"
         />
         <a-gltf-model
@@ -255,10 +265,46 @@ const WorldContainer = () => {
           src="#horoscopeNpc"
           shadow="cast: true; receive: false"
           scale="15 15 15"
-          position="-65 3 -345"
-          rotation="0 0 0"
+          position="-45 3 -156"
+          rotation="0 100 0"
         />
-        <a-camera position="0 7 0">
+        {/* exclamation marks */}
+        <a-gltf-model
+          id="exclamationMark1-model"
+          src="#exclamationMark"
+          scale="3 3 3"
+          position="40.691 6 -59.691"
+          rotation="0 90 0"
+        />
+        <a-gltf-model
+          id="exclamationMark2-model"
+          src="#exclamationMark"
+          scale="3 3 3"
+          position="45.986 5.901 -178.886"
+          rotation="0 90 0"
+        />
+        <a-gltf-model
+          id="exclamationMark3-model"
+          src="#exclamationMark"
+          scale="3 3 3"
+          position="-33.318 7.280 -67.5"
+          rotation="0 90 0"
+        />
+        <a-gltf-model
+          id="exclamationMark4-model"
+          src="#exclamationMark"
+          scale="3 3 3"
+          position="-43.330 7.374 -198.996"
+          rotation="0 90 0"
+        />
+        <a-gltf-model
+          id="exclamationMark5-model"
+          src="#exclamationMark"
+          scale="3 3 3"
+          position="-41.555 7.820 -156.640"
+          rotation="0 90 0"
+        />
+        <a-camera position="0 7 0" wasd-controls="acceleration:100">
           <a-entity
             position="0 -5 0"
             rotation="0 180 0"
@@ -274,26 +320,13 @@ const WorldContainer = () => {
           on: keydown:keyW"
         ></a-entity>
       </a-scene>
-      <GuideDialog guideInfos={worldGuideInfos} open={guideOpen} setOpen={setGuideOpen} />
+
       <BuildingDialog
         buildingInfos={info}
         building={Building}
         open={isopen}
         setOpen={setOpened}
       />
-      <Button
-        sx={{
-          position: 'absolute',
-          bottom: '1vh',
-          right: '1vw',
-          zIndex: 999,
-        }}
-        onClick={() => {
-          setGuideOpen(true);
-        }}
-      >
-        <img src={questionmark} alt="questionmark" />
-      </Button>
     </>
   );
 };

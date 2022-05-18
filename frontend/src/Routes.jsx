@@ -7,19 +7,30 @@ import World from '@/pages/World';
 import Museum from '@/pages/Museum';
 import Observatory from '@/pages/Observatory';
 import Horoscope from '@/pages/Horoscope';
-import SpaceTravelDialog from './components/SpaceTravelDialog';
+import SpaceTravelDialog from '@/components/SpaceTravelDialog';
+import Library from '@/pages/Library';
 import ImageGallery from '@/pages/MuseumGallery';
+import Character from '@/pages/Character';
+import Moon from '@/pages/Moon';
+import ObservationSpot from '@/pages/ObservationSpot';
+import StellarGuide from '@/pages/StellarGuide';
+
 export default function Routes() {
   return (
     <ReactRouterRoutes>
       <Route path="/" element={<MainPage />} />
+      <Route path="/character" element={<Character />} />
       <Route path="/spaceship" element={<SpaceTravelDialog />} />
+      <Route path="/library" element={<Library />} />
+      <Route path="/moon" element={<Moon />} />
       <Route path="/vite" element={<Vite />} />
       <Route path="/worldmap" element={<WorldMap />} />
       <Route path="/world" element={<World />} />
       <Route path="/museum" element={<Museum />} />
       <Route path="/museum/gallery" element={<ImageGallery />} />
       <Route path="/observatory" element={<Observatory />} />
+      <Route path="/observatory/spot" element={<ObservationSpot />} />
+      <Route path="/observatory/stellar" element={<StellarGuide />} />
       <Route path="/horoscope" element={<Horoscope />} />
       <Route path="/404" element={<NotFound />} />
       <Route path="*" element={<Navigate replace to="/404" />} />

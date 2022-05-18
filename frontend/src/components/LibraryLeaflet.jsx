@@ -46,15 +46,17 @@ const Background = styled.img`
   z-index: 100;
 `
 
-const CloseButton = styled(Button)`
+const CloseButton = styled.button`
   position: absolute;
   top: -2rem;
   right: 0;
-  font-size: 0.7rem;
+  font-size: 1.3rem;
   color: #fff;
   text-shadow: rgba(0, 0, 0, 0.3) 0 1px 0;
   backface-visibility: hidden;
-  // z-index: 100;
+  background: none;
+  border: none;
+  cursor: pointer;
 `
 
 const MenuItem = styled.div`
@@ -64,13 +66,29 @@ const MenuItem = styled.div`
   padding: 2em;
   transition: 0.5s;
   transform-style: preserve-3d;
-  &:hover {
-    cursor: pointer;
-  }
 `
 
 const MenuList = styled.div`
   transform-style: preserve-3d;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+`
+
+const MenuItemText = styled(Typography)`
+  font-size: 3rem;
+  font-family: 'Shining_star';
+  cursor: pointer;
+  &:hover{
+    text-decoration: #137 wavy underline;
+  }
 `
 
 function LibraryLeaflet ({setIsOpen, category, title, color}) {
@@ -81,7 +99,6 @@ function LibraryLeaflet ({setIsOpen, category, title, color}) {
   const [pageThree, setPageThree] = useState([]);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [currentMenuItem, setCurrentMenuItem] = useState({});
-
   let pageCount = 0;
 
   useEffect(() => {
@@ -144,20 +161,8 @@ function LibraryLeaflet ({setIsOpen, category, title, color}) {
 		}, 500);
   }
 
-  const handleClose = () => {
-    setIsOpen(false);
-  }
-
-  const handleOpenDetail = () => {
-    setIsDetailOpen(true);
-  }
-
-  const handleCloseDetail = () => {
-    setIsDetailOpen(false);
-  }
-
-  const handleMenuItem = (page, index) => {
-    setCurrentMenuItem({page, index});
+  const handleMenuItem = (item) => {
+    setCurrentMenuItem(item);
     setIsDetailOpen(true);
   }
 
@@ -170,32 +175,29 @@ function LibraryLeaflet ({setIsOpen, category, title, color}) {
             <div className="page-face cover-page" style={{background: color}}>
               <Typography
                 sx={{
-                  fontSize: '1rem',
+                  fontSize: '1.5rem',
                   color: 'white',
+                  fontFamily: 'SDSamliphopangche_Basic',
+                  zIndex: '1',
                 }}
               >별 보러 가자</Typography>
               <Typography
-                variant="h1"
                 sx={{
-                  fontSize: '1.5rem',
+                  fontSize: '3rem',
                   fontWeight: 'bold',
                   color: 'white',
+                  fontFamily: 'Shining_star',
+                  zIndex: '1',
                 }}
               >{title}</Typography>
             </div>
             <div className="page-face">
               <MenuList>
                 {pageOne.map((item, index) => (
-                  <MenuItem key={index} onClick={() => handleMenuItem(0, index)} >
-                    <Typography
-                      sx={{
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                      }}
-                    >{item.title}</Typography>
-                    { currentMenuItem.page === 0 && currentMenuItem.index === index &&
-                      <LibraryDetailDialog title={item.title} open={isDetailOpen} content={item.content} setOpen={setIsDetailOpen} />
-                    }
+                  <MenuItem key={index} onClick={() => handleMenuItem(item)} >
+                    <MenuItemText>
+                      {item.title}
+                    </MenuItemText>
                   </MenuItem>
                 ))}
               </MenuList>
@@ -205,16 +207,10 @@ function LibraryLeaflet ({setIsOpen, category, title, color}) {
             <div className="page-face">
               <MenuList>
                 {pageTwo.map((item, index) => (
-                  <MenuItem key={index} onClick={() => handleMenuItem(1, index)}>
-                    <Typography
-                      sx={{
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                      }}
-                    >{item.title}</Typography>
-                    { currentMenuItem.page === 1 && currentMenuItem.index === index &&
-                      <LibraryDetailDialog title={item.title} open={isDetailOpen} content={item.content} setOpen={setIsDetailOpen} />
-                    }
+                  <MenuItem key={index} onClick={() => handleMenuItem(item)}>
+                    <MenuItemText>
+                      {item.title}
+                    </MenuItemText>
                   </MenuItem>
                 ))}
               </MenuList>
@@ -224,10 +220,11 @@ function LibraryLeaflet ({setIsOpen, category, title, color}) {
           <div className="page" data-page="3">
             <div className="page-face cover-page" style={{background: color}}>
               <Typography
-                variant="h1"
                 sx={{
-                  fontSize: '1rem',
+                  fontSize: '1.75rem',
                   color: 'white',
+                  fontFamily: 'Shining_star',
+                  zIndex: '1',
                 }}
               >궁금한 {title}
                 { title === '우주에 관한 상식' ?
@@ -240,16 +237,10 @@ function LibraryLeaflet ({setIsOpen, category, title, color}) {
             <div className="page-face">
               <MenuList>
                 {pageThree.map((item, index) => (
-                  <MenuItem key={index} onClick={() => handleMenuItem(2, index)}>
-                    <Typography
-                      sx={{
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                      }}
-                    >{item.title}</Typography>
-                    { currentMenuItem.page === 2 && currentMenuItem.index === index &&
-                      <LibraryDetailDialog title={item.title} open={isDetailOpen} content={item.content} setOpen={setIsDetailOpen} />
-                    }
+                  <MenuItem key={index} onClick={() => handleMenuItem(item)}>
+                    <MenuItemText>
+                      {item.title}
+                    </MenuItemText>
                   </MenuItem>
                 ))}
               </MenuList>
@@ -258,6 +249,7 @@ function LibraryLeaflet ({setIsOpen, category, title, color}) {
           </div>
         </Leaflet3D>
       </LeafletBox>
+      <LibraryDetailDialog detailInfo={currentMenuItem} open={isDetailOpen} setOpen={setIsDetailOpen} />
     </>
   );
 }

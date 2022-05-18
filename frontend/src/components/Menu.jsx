@@ -9,7 +9,7 @@ import { bgmInfo } from '@/constants';
 const Menu = ({ isGuideDialog, isWorld, setGuideOpen, placeBGM }) => {
   const navigate = useNavigate();
 
-  const [value1, setValue1] = useState(0);
+  const [value1, setValue1] = useState(0.2);
   const [value2, setValue2] = useState(0.2);
 
   const [anchor1El, setAnchor1El] = useState(null);
@@ -22,7 +22,7 @@ const Menu = ({ isGuideDialog, isWorld, setGuideOpen, placeBGM }) => {
     const nowPlaceBGM = bgmInfo.filter((item, idx) => item.place == placeBGM);
     if (Object.keys(nowPlaceBGM).length != 0) {
       audioSetting.src = nowPlaceBGM[0].bgm;
-      audioSetting.volume = 0;
+      audioSetting.volume = 0.2;
     }
 
     const footstepsSetting = document.querySelector('#footsteps');

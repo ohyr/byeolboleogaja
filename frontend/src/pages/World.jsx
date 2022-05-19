@@ -17,16 +17,18 @@ export default function World() {
 
   useEffect(() => {
     if (isSkip == 0) {
-      setOpen(true);
-      setSnackOpen(true);
+      setTimeout(() => {
+        setOpen(true);
+        setSnackOpen(true);
+      }, 3000);
     }
   }, []);
 
   useEffect(() => {
     if (isSkip == 1) {
       if (guideOpen == true) {
-        $setisSkip(0);
         setOpen(true);
+        $setisSkip(0);
       }
     }
   }, [guideOpen]);
@@ -63,7 +65,7 @@ export default function World() {
         open={snackOpen}
         autoHideDuration={3000}
         onClose={handleClose}
-        message={`${nickname}` + '! 어서와~ 별보러 함께 모험을 떠나자!'}
+        message={`${nickname}` + '! 별보러가자와 함께 즐거운 우주 여행되세요!'}
         action={action}
       />
       <WorldGuideDialog

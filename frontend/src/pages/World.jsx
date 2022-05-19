@@ -76,6 +76,7 @@ export default function World() {
       />
 
       <Menu
+        onChange={handleChange}
         isGuideDialog={true}
         setGuideOpen={setGuideOpen}
         isWorld={false}

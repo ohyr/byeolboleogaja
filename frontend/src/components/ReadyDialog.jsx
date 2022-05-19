@@ -7,6 +7,7 @@ import {
   DialogTitle,
   Typography,
 } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 
 const ReadyDialog = ({ open, setOpen }) => {
   const handleClose = () => {
@@ -18,7 +19,6 @@ const ReadyDialog = ({ open, setOpen }) => {
       <Dialog fullWidth maxWidth="md" open={open}>
         <DialogTitle>
           <Typography
-            component="h1"
             sx={{
               fontSize: '1.5rem',
               fontWeight: 'bold',
@@ -30,7 +30,6 @@ const ReadyDialog = ({ open, setOpen }) => {
         </DialogTitle>
         <DialogContent>
           <Typography
-            component="body1"
             sx={{
               fontSize: '1.2rem',
               fontWeight: 'bold',
@@ -77,7 +76,7 @@ const ReadyDialog = ({ open, setOpen }) => {
             sx={{ position: 'absolute', top: '8px', right: '8px' }}
             onClick={handleClose}
           >
-            닫기
+            <CloseIcon />
           </Button>
         </DialogActions>
       </Dialog>

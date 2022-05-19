@@ -5,10 +5,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  MobileStepper,
   Typography,
 } from '@mui/material';
-// import { getQuiz } from '@/api/quiz';
+import { Close as CloseIcon } from '@mui/icons-material';
+import { getQuiz } from '@/api/quiz';
 import { quizDefault } from '@/constants';
 import ReadyDialog from '@/components/ReadyDialog';
 
@@ -17,16 +17,21 @@ const QuizDialog = ({ open, setOpen }) => {
   const [quiz, setQuiz] = useState(quizDefault);
   const [reply, setReply] = useState('false');
   const [activeStep, setActiveStep] = useState(0);
-  const maxSteps = quiz.length;
+  const [count, setCount] = useState(0);
+  const maxSteps = quiz.length * 2;
 
-  //   const initQuiz = async () => {
-  //     const res = await getQuiz();
-  //     setQuiz(res.data);
-  //   };
+  const initQuiz = async () => {
+    try {
+      const res = await getQuiz();
+      setQuiz(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    // initQuiz();
     setActiveStep(0);
+    initQuiz();
   }, [open]);
 
   const handleClose = () => {
@@ -35,6 +40,9 @@ const QuizDialog = ({ open, setOpen }) => {
   };
 
   const handleNext = () => {
+    if (reply === quiz[Math.floor(activeStep / 2)].answer) {
+      setCount((count) => count + 1);
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -56,6 +64,7 @@ const QuizDialog = ({ open, setOpen }) => {
       handleNext();
     }
   };
+
   return (
     <>
       <Dialog fullWidth maxWidth="md" open={open}>
@@ -63,35 +72,26 @@ const QuizDialog = ({ open, setOpen }) => {
           <>
             <DialogTitle>
               <Typography
-                component="h1"
                 sx={{
                   fontSize: '1.5rem',
                   fontWeight: 'bold',
                   textTransform: 'none',
                 }}
               >
-                {quiz[activeStep].title}
+                OX Quiz
               </Typography>
             </DialogTitle>
             <DialogContent>
               <Typography
-                component="body1"
                 sx={{
                   fontSize: '1.2rem',
                   fontWeight: 'bold',
                   textTransform: 'none',
                 }}
               >
-                {`${quiz[activeStep].question}`}
+                {`${quiz[Math.floor(activeStep / 2)].question}`}
               </Typography>
             </DialogContent>
-            <MobileStepper
-              steps={maxSteps}
-              position="static"
-              activeStep={activeStep}
-              nextButton={<Button></Button>}
-              backButton={<Button></Button>}
-            />
             <DialogActions>
               <Button
                 variant="outlined"
@@ -127,7 +127,7 @@ const QuizDialog = ({ open, setOpen }) => {
                 sx={{ position: 'absolute', top: '8px', right: '8px' }}
                 onClick={handleClose}
               >
-                닫기
+                <CloseIcon />
               </Button>
             </DialogActions>
           </>
@@ -135,39 +135,32 @@ const QuizDialog = ({ open, setOpen }) => {
           <>
             <DialogTitle>
               <Typography
-                component="h1"
                 sx={{
                   fontSize: '1.5rem',
                   fontWeight: 'bold',
                   textTransform: 'none',
                 }}
               >
-                {quiz[activeStep].title}
+                {reply === `${quiz[Math.floor(activeStep / 2)].answer}`
+                  ? '정답!'
+                  : '오답!'}
               </Typography>
             </DialogTitle>
             <DialogContent>
               <Typography
-                component="body1"
                 sx={{
                   fontSize: '1.2rem',
                   fontWeight: 'bold',
                   textTransform: 'none',
                 }}
               >
-                {reply == `${quiz[activeStep].answer}`
+                {reply === `${quiz[Math.floor(activeStep / 2)].answer}`
                   ? '정답이야!'
                   : '틀렸어!'}
                 &nbsp;
-                {`${quiz[activeStep].description}`}
+                {`${quiz[Math.floor(activeStep / 2)].description}`}
               </Typography>
             </DialogContent>
-            <MobileStepper
-              steps={maxSteps}
-              position="static"
-              activeStep={activeStep}
-              nextButton={<Button></Button>}
-              backButton={<Button></Button>}
-            />
             <DialogActions>
               <Button
                 variant="outlined"
@@ -203,7 +196,7 @@ const QuizDialog = ({ open, setOpen }) => {
                 sx={{ position: 'absolute', top: '8px', right: '8px' }}
                 onClick={handleClose}
               >
-                닫기
+                <CloseIcon />
               </Button>
             </DialogActions>
           </>

@@ -16,7 +16,6 @@ import spaceshipNpc from '@/assets/model/world/mdl-npc-4.glb?url';
 import horoscopeNpc from '@/assets/model/world/mdl-npc-5.glb?url';
 import exclamationMark from '@/assets/model/world/mdl-exclamation-mark.glb?url';
 
-import LoadingScene from '@/components/LoadingScene';
 import BuildingDialog from '@/components/BuildingDialog';
 
 import {
@@ -30,7 +29,6 @@ import {
 import { useStore } from '@/store';
 
 const WorldContainer = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
   const chracterColor = useStore((state) => state.chracterColor);
@@ -98,13 +96,6 @@ const WorldContainer = () => {
     player.setAttribute('animation-mixer', { clip: 'base' });
   });
 
-  useEffect(() => {
-    // model-loaded 이벤트 3개가 1개로 처리되는 문제로 progress 값 6 이상으로 임의 설정
-    if (progress >= 6) {
-      setIsLoading(false);
-    }
-  }, [progress]);
-
   const [open, setOpen] = useState(true);
   const [isopen, setOpened] = useState(false);
   const [info, setInfo] = useState(observatoryIntro);
@@ -146,7 +137,6 @@ const WorldContainer = () => {
   });
   return (
     <>
-      {isLoading && <LoadingScene loadingTime={progress} />}
       <a-scene
         vr-mode-ui="enabled: false"
         loading-screen="enabled: false"

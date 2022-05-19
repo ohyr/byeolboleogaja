@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useStore } from '@/store';
 import WorldGuideDialog from '@/components/WorldGuideDialog';
+
 import Menu from '@/components/Menu';
 import WorldContainer from '@/components/WorldContainer';
 import { worldGuideInfos } from '@/constants';
 import { Snackbar, IconButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
-import LoadingScene from '@/components/LoadingScene';
 export default function World() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -15,26 +15,15 @@ export default function World() {
   const isSkip = useStore((state) => state.isSkip);
   const nickname = useStore((state) => state.nickname);
   const $setisSkip = useStore((state) => state.setisSkip);
-  const [isLoading, setIsLoading] = useState(true);
-  const LOADING_TIME = 2000;
+
   useEffect(() => {
-    if (isLoading) {
+    if (isSkip == 0) {
       setTimeout(() => {
-        setIsLoading(false);
-        LOADING_TIME + 1000;
-        if (isSkip == 0) {
-          setOpen(true);
-          setSnackOpen(true);
-        }
-      });
+        setOpen(true);
+        setSnackOpen(true);
+      }, 4000);
     }
   }, []);
-  // useEffect(() => {
-  //   if (isSkip == 0) {
-  //     setOpen(true);
-  //     setSnackOpen(true);
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (isSkip == 1) {
@@ -68,12 +57,7 @@ export default function World() {
 
   return (
     <main>
-      {isLoading ? (
-        <LoadingScene loadingTime={LOADING_TIME} />
-      ) : (
-        <WorldContainer />
-      )}
-
+      <WorldContainer />
       <Snackbar
         anchorOrigin={{
           vertical: 'bottom',
@@ -82,10 +66,9 @@ export default function World() {
         open={snackOpen}
         autoHideDuration={3000}
         onClose={handleClose}
-        message={`${nickname}` + '! 별보러가자와 함께 즐거운 우주 여행되세요!'}
+        message={`${nickname}` + '! 어서와~ 별 보러 함께 모험을 떠나자!'}
         action={action}
       />
-
       <WorldGuideDialog
         guideInfos={worldGuideInfos}
         open={open}

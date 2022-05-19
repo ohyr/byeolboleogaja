@@ -13,19 +13,24 @@ export default function World() {
   const [snackOpen, setSnackOpen] = useState(false);
   const isSkip = useStore((state) => state.isSkip);
   const nickname = useStore((state) => state.nickname);
+  const $setisSkip = useStore((state) => state.setisSkip);
+
   useEffect(() => {
     if (isSkip == 0) {
-      setTimeout(function () {
-        setOpen(true);
-
-        setSnackOpen(true);
-      }, 3000);
-    }
-    if (isSkip === 1) {
-      setSnackOpenCheck(true);
-      setOpen(false);
+      setOpen(true);
+      setSnackOpen(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (isSkip == 1) {
+      if (guideOpen == true) {
+        $setisSkip(0);
+        setOpen(true);
+      }
+    }
+  }, [guideOpen]);
+
   useEffect(() => {
     if (snackOpenCheck == true) {
       setSnackOpen(false);
@@ -66,6 +71,7 @@ export default function World() {
         open={open}
         setOpen={setOpen}
       />
+
       <Menu
         isGuideDialog={true}
         setGuideOpen={setGuideOpen}

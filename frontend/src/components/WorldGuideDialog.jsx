@@ -20,15 +20,22 @@ const GuideImg = styled.img`
 function WorldGuideDialog({ guideInfos, open, setOpen }) {
   const [activeStep, setActiveStep] = useState(0);
   const maxSteps = guideInfos.length;
+  const isSkip = useStore((state) => state.isSkip);
   const $setisSkip = useStore((state) => state.setisSkip);
 
   useEffect(() => {
     setActiveStep(0);
   }, [open]);
 
-  const handleClose = async () => {
-    $setisSkip(1);
-    setOpen(false);
+  const handleClose = () => {
+    if (isSkip == 0) {
+      $setisSkip(1);
+      setOpen(false);
+    }
+    if (isSkip == 1) {
+      setOpen(false);
+      $setisSkip(1);
+    }
   };
 
   const handleNext = () => {

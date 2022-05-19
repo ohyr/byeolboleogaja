@@ -30,62 +30,34 @@ import {
 import { useStore } from '@/store';
 
 const WorldContainer = () => {
+  const LOADING_TIME = 5000;
   const [isLoading, setIsLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (isLoading) {
+      setTimeout(() => setIsLoading(false), LOADING_TIME + 1000);
+    }
+  }, []);
 
   const chracterColor = useStore((state) => state.chracterColor);
 
-  useEffect(() => {
-    const sceneEl = document.querySelector('a-scene');
-    const libraryEl = sceneEl.querySelector('#library-model');
-    const observatoryEl = sceneEl.querySelector('#observatory-model');
-    const spaceshipEl = sceneEl.querySelector('#spaceship-model');
-    const satelliteEl = sceneEl.querySelector('#satellite-model');
-    const witchHouseEl = sceneEl.querySelector('#witch-house-model');
-    const libraryNpcEl = sceneEl.querySelector('#libraryNpc-model');
-    const observatoryNpcEl = sceneEl.querySelector('#observatoryNpc-model');
-    const museumNpcEl = sceneEl.querySelector('#museumNpc-model');
-    const spaceshipNpcEl = sceneEl.querySelector('#spaceshipNpc-model');
-    const horoscopeNpcEl = sceneEl.querySelector('#horoscopeNpc-model');
-
-    libraryEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-    observatoryEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-    spaceshipEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-    satelliteEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-    witchHouseEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-    libraryNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-    observatoryNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-    museumNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-    spaceshipNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-    horoscopeNpcEl.addEventListener('model-loaded', function () {
-      setProgress(progress + 1);
-    });
-  });
-
-  useEffect(() => {
-    // model-loaded 이벤트 3개가 1개로 처리되는 문제로 progress 값 6 이상으로 임의 설정
-    if (progress >= 6) {
-      setIsLoading(false);
+  document.addEventListener('keydown', function (event) {
+    if (
+      event.key === 'ArrowUp' ||
+      event.key === 'ArrowDown' ||
+      event.key === 'ArrowRight' ||
+      event.key === 'ArrowLeft' ||
+      event.key === 'w' ||
+      event.key === 'a' ||
+      event.key === 's' ||
+      event.key === 'd'
+    ) {
+      player.setAttribute('animation-mixer', { clip: 'walk' });
     }
-  }, [progress]);
+  });
+  document.addEventListener('keyup', function () {
+    player.setAttribute('animation-mixer', { clip: 'base' });
+  });
 
   const [open, setOpen] = useState(true);
   const [isopen, setOpened] = useState(false);
@@ -128,7 +100,7 @@ const WorldContainer = () => {
   });
   return (
     <>
-      {isLoading && <LoadingScene loadingTime={progress} />}
+      <LoadingScene loadingTime={LOADING_TIME} />
       <a-scene
         vr-mode-ui="enabled: false"
         loading-screen="enabled: false"
@@ -149,26 +121,25 @@ const WorldContainer = () => {
           <a-asset-item id="museumNpc" src={museumNpc}></a-asset-item>
           <a-asset-item id="spaceshipNpc" src={spaceshipNpc}></a-asset-item>
           <a-asset-item id="horoscopeNpc" src={horoscopeNpc}></a-asset-item>
-          <a-asset-item id="exclamationMark" src={exclamationMark}></a-asset-item>
+          <a-asset-item
+            id="exclamationMark"
+            src={exclamationMark}
+          ></a-asset-item>
         </a-assets>
         <a-sky src="#sky" />
         <a-entity
-          position="0 400 25"
+          position="0 600 0"
           light="type:point;
-          intensity: 1.5;
+          intensity: 1.3;
           castShadow:true;
-          shadowCameraTop:    500;
-          shadowCameraRight:  500;
-          shadowCameraLeft:   -500"
+          shadowCameraFar:800"
         ></a-entity>
         <a-entity
-          position="0 400 25"
-          light="type:directional;
-          intensity: 1.5;
+          position="0 600 -400"
+          light="type:point;
+          intensity: 1.3;
           castShadow:true;
-          shadowCameraTop:    500;
-          shadowCameraRight:  500;
-          shadowCameraLeft:   -500"
+          shadowCameraFar:800"
         ></a-entity>
         <a-gltf-model
           src="#ground"
@@ -188,7 +159,7 @@ const WorldContainer = () => {
           src="#observatory"
           scale="120 120 120"
           shadow="cast: true; receive: false"
-          position="41.511 29.726 -56.011"
+          position="41.511 29 -56.011"
           rotation="0 90 0"
         />
         <a-gltf-model
@@ -204,7 +175,7 @@ const WorldContainer = () => {
           src="#museum"
           shadow="cast: true; receive: false"
           scale="2.3 2.3 2.3"
-          position="-54.671 0 -86.823"
+          position="-54.671 -1.3 -86.823"
         />
         <a-gltf-model
           id="satellite-model"
@@ -250,6 +221,7 @@ const WorldContainer = () => {
           position="-35 2.4 -70"
           rotation="0 30 0"
         />
+
         <a-gltf-model
           id="spaceshipNpc-model"
           class="clickable"
@@ -263,9 +235,10 @@ const WorldContainer = () => {
           id="horoscopeNpc-model"
           class="clickable"
           src="#horoscopeNpc"
+          light="type:directional;"
           shadow="cast: true; receive: false"
           scale="15 15 15"
-          position="-45 3 -156"
+          position="-45 2.5 -156"
           rotation="0 100 0"
         />
         {/* exclamation marks */}
@@ -273,13 +246,15 @@ const WorldContainer = () => {
           id="exclamationMark1-model"
           src="#exclamationMark"
           scale="3 3 3"
-          position="40.691 6 -59.691"
+          shadow="cast: false; receive: false"
+          position="40.691 6 -59.7"
           rotation="0 90 0"
         />
         <a-gltf-model
           id="exclamationMark2-model"
           src="#exclamationMark"
           scale="3 3 3"
+          shadow="cast: false; receive: false"
           position="45.986 5.901 -178.886"
           rotation="0 90 0"
         />
@@ -287,33 +262,40 @@ const WorldContainer = () => {
           id="exclamationMark3-model"
           src="#exclamationMark"
           scale="3 3 3"
-          position="-33.318 7.280 -67.5"
-          rotation="0 90 0"
+          shadow="cast: false; receive: false"
+          position="-33.5 7 -67.4"
+          rotation="0 30 0"
         />
         <a-gltf-model
           id="exclamationMark4-model"
           src="#exclamationMark"
+          shadow="cast: false; receive: false"
           scale="3 3 3"
-          position="-43.330 7.374 -198.996"
-          rotation="0 90 0"
+          position="-43.330 7.5 -198.7"
+          rotation="0 70 0"
         />
         <a-gltf-model
           id="exclamationMark5-model"
           src="#exclamationMark"
+          shadow="cast: false; receive: false"
           scale="3 3 3"
-          position="-41.555 7.820 -156.640"
-          rotation="0 90 0"
+          position="-41.555 5 -156.6"
+          rotation="0 100 0"
         />
-        <a-camera position="0 7 0" wasd-controls="acceleration:100">
+        <a-camera position="0 4 0" wasd-controls="acceleration:100">
           <a-entity
-            position="0 -5 0"
+            gltf-model={chracterColor}
+            cursor="rayOrigin: mouse"
+            raycaster="objects: .clickable "
+            scale="0.2 0.3 0.2"
+            height="0.5"
+            position="0 -1.8 -0.5"
             rotation="0 180 0"
-            cursor="rayOrigin: mouse;"
-            raycaster="objects: .clickable"
-          >
-            <a-gltf-model src="#amongus" />
-          </a-entity>
+            id="player"
+            animation-mixer="clip: base"
+          ></a-entity>
         </a-camera>
+
         <a-entity
           keyboard-controls
           sound="src: {footsteps};
